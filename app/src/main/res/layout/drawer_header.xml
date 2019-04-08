@@ -1,0 +1,27 @@
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <data>
+        <!--<variable-->
+            <!--name="viewModel"-->
+            <!--type="br.com.vostre.songlist.viewModel.BaseViewModel" />-->
+    </data>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_alignParentTop="true"
+        android:orientation="vertical"
+        android:fitsSystemWindows="true"
+        tools:context=".view.MenuActivity">
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:visibility="visible" />
+
+    </LinearLayout>
+
+</layout>

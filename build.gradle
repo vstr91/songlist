@@ -9,6 +9,10 @@ buildscript {
             url 'https://maven.fabric.io/public'
         }
 
+        flatDir {
+            dirs 'libs'
+        }
+
         //start here
         configurations.all {
             resolutionStrategy.eachDependency { DependencyResolveDetails details ->

@@ -12,6 +12,8 @@ public class Musica extends EntidadeBase {
     @NonNull
     private String show;
 
+    private String idSpotify;
+
     public String getObservacao() {
         return observacao;
     }
@@ -27,6 +29,14 @@ public class Musica extends EntidadeBase {
 
     public void setShow(@NonNull String show) {
         this.show = show;
+    }
+
+    public String getIdSpotify() {
+        return idSpotify;
+    }
+
+    public void setIdSpotify(String idSpotify) {
+        this.idSpotify = idSpotify;
     }
 
 }

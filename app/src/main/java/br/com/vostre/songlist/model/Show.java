@@ -20,6 +20,9 @@ public class Show extends EntidadeBase {
     private String cidade;
 
     @NonNull
+    private String estado;
+
+    @NonNull
     private String pais;
 
     @NonNull
@@ -49,4 +52,21 @@ public class Show extends EntidadeBase {
         this.pais = pais;
     }
 
+    @NonNull
+    public DateTime getData() {
+        return data;
+    }
+
+    public void setData(@NonNull DateTime data) {
+        this.data = data;
+    }
+
+    @NonNull
+    public String getEstado() {
+        return estado;
+    }
+
+    public void setEstado(@NonNull String estado) {
+        this.estado = estado;
+    }
 }

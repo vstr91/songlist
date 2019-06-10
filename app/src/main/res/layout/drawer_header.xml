@@ -13,7 +13,7 @@
         android:layout_alignParentTop="true"
         android:orientation="vertical"
         android:fitsSystemWindows="true"
-        tools:context=".view.MenuActivity">
+        tools:context=".view.MainActivity">
 
         <TextView
             android:id="@+id/textView"

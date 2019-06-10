@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">Songlist</string>
+    <string name="descricao">O Songlist traz as músicas tocadas nos últimos
+        shows de um artista ou banda. Basta digitar no campo abaixo o nome do artista ou da banda que deseja
+        pesquisar e pressionar a opção desejada na lista de
+        resultados que será exibida.\n\n
+        Para exportar para o Spotify, aperte e mantenha pressionado sobre o(s) artista(s)
+        desejados na lista abaixo.
+    </string>
 </resources>

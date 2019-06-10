@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Songlist</string>
+    <string name="consultas_anteriores">Latest Queries</string>
+    <string name="sobre_o_aplicativo">About the app</string>
+    <string name="m_sicas_mais_tocadas">Most Played Songs</string>
+    <string name="refazer_consulta">Redo Query</string>
+    <string name="escolha_um_op_o_abaixo">Choose an option below</string>
+    <string name="criar_playlist">Create Playlist</string>
+    <string name="adicionar_playlist">Add to Playlist</string>
+    <string name="criar_playlist_no_spotify">Create Playlist in Spotify</string>
+    <string name="digite_aqui_o_nome_do_artista_ou_banda">Type here the artist\'s or band\'s name</string>
+    <string name="com_base_nos_ltimos_20_shows_cadastrados_no_site_setlist_fm">(based on the last 20 gigs listed in setlist.fm website)</string>
+    <string name="escolha_um_nome_legal_para_sua_nova_playlist">Choose a cool name for your brand new playlist!</string>
+    <string name="descricao">Songlist brings the songs played in an artist\'s or band\'s last gigs. Just type in the input below the artist\'s or band\'s name you want to query and choose from the list that will be shown. To create a Spotify playlist, press and hold the artists name in the list below.</string>
+    <string name="erro_informacoes">Error while querying the data. Please try again</string>
+    <string name="nenhum_registro">None found!</string>
+    <string name="erro_busca_repertorio">Error while querying the setlists.</string>
+    <string name="escolha_artista">Please choose at least one artist.</string>
+    <string name="erro_carregar_usuario">Error while loading user. Please try again.</string>
+    <string name="erro_exportar_musicas">Error while exporting songs!</string>
+    <string name="playlist_criada_sucesso">Playlist created!</string>
+    <string name="erro_criar_playlist">Error while creating the playlist! Please try again.</string>
+    <string name="musicas">Songs</string>
+    <string name="buscando_musicas">Querying songs... one moment, please!</string>
+    <string name="erro_conexao">You\'re offline! Please check your internet connection and try again.</string>
+    <string name="musicas_observer">Songs:</string>
+    <string name="erro_conexao_busca_artista">You\'re offline. The query can\'t be done while offline. Please verify your internet connection and try again.</string>
+    <string name="erro_login">Error while logging in. Please try again.</string>
+    <string name="erro_internet_musicas">You\'re offline! Please check your internet connection to be able to update the songs.</string>
+</resources>

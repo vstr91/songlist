@@ -24,7 +24,7 @@
             android:layout_marginStart="16dp"
             android:layout_marginLeft="16dp"
             android:layout_marginTop="16dp"
-            android:text="Escolha um opção abaixo"
+            android:text="@string/escolha_um_op_o_abaixo"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -38,7 +38,7 @@
             android:layout_marginEnd="8dp"
             android:layout_marginRight="8dp"
             android:onClick="@{view::onClickBtnNova}"
-            android:text="Criar Playlist"
+            android:text="@string/criar_playlist"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
@@ -55,7 +55,7 @@
             android:layout_marginRight="8dp"
             android:layout_marginBottom="8dp"
             android:onClick="@{view::onClickBtnAdicionar}"
-            android:text="Adicionar à Playlist"
+            android:text="@string/adicionar_playlist"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

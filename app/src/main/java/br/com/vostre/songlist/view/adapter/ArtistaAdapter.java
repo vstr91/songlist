@@ -19,7 +19,7 @@ public class ArtistaAdapter extends RecyclerView.Adapter<ArtistaViewHolder> {
     public ArtistaAdapter(List<Artista> artistas, Context context){
         this.artistas = artistas;
         ctx = context;
-        setHasStableIds(true);
+//        setHasStableIds(true);
     }
 
     @Override

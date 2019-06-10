@@ -25,7 +25,7 @@
             android:layout_marginRight="8dp"
             android:layout_marginBottom="32dp"
             android:onClick="@{view::onClickBtnSalvar}"
-            android:text="Criar Playlist"
+            android:text="@string/criar_playlist"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textInputLayout" />
@@ -47,7 +47,7 @@
                 android:id="@+id/editTextPlaylist"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Escolha um nome legal para sua nova playlist!" />
+                android:hint="@string/escolha_um_nome_legal_para_sua_nova_playlist" />
 
         </android.support.design.widget.TextInputLayout>
 

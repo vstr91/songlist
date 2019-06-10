@@ -7,4 +7,30 @@
         Para exportar para o Spotify, aperte e mantenha pressionado sobre o(s) artista(s)
         desejados na lista abaixo.
     </string>
+    <string name="consultas_anteriores">Consultas Anteriores</string>
+    <string name="criar_playlist_no_spotify">Criar Playlist no Spotify</string>
+    <string name="digite_aqui_o_nome_do_artista_ou_banda">Digite aqui o nome do artista ou banda...</string>
+    <string name="sobre_o_aplicativo">Sobre o Aplicativo</string>
+    <string name="m_sicas_mais_tocadas">Músicas Mais Tocadas</string>
+    <string name="com_base_nos_ltimos_20_shows_cadastrados_no_site_setlist_fm">(com base nos últimos 20 shows cadastrados no site setlist.fm)</string>
+    <string name="refazer_consulta">Refazer Consulta</string>
+    <string name="escolha_um_op_o_abaixo">Escolha uma opção abaixo</string>
+    <string name="criar_playlist">Criar Playlist</string>
+    <string name="escolha_um_nome_legal_para_sua_nova_playlist">Escolha um nome legal para sua nova playlist!</string>
+    <string name="adicionar_playlist">Adicionar à Playlist</string>
+    <string name="erro_informacoes">Erro ao buscar informações. Por favor tente novamente.</string>
+    <string name="nenhum_registro">Nenhum registro encontrado!</string>
+    <string name="erro_busca_repertorio">Erro ao buscar repertório.</string>
+    <string name="erro_conexao_busca_artista">Não há conexão com a internet. A busca por artistas não poderá ser realizada. Por favor verifique e tente novamente.</string>
+    <string name="escolha_artista">Por favor selecione ao menos um artista.</string>
+    <string name="erro_carregar_usuario">Houve erro ao carregar seu usuário. Por favor tente novamente.</string>
+    <string name="erro_login">Houve erro ao fazer login. Por favor tente novamente.</string>
+    <string name="erro_exportar_musicas">Erro ao exportar músicas!</string>
+    <string name="playlist_criada_sucesso">Playlist criada com sucesso!</string>
+    <string name="erro_criar_playlist">Erro ao criar playlist! Por favor tente novamente.</string>
+    <string name="musicas">Músicas</string>
+    <string name="buscando_musicas">Buscando músicas... Só um momento, por favor!</string>
+    <string name="erro_internet_musicas">Não há conexão com a Internet! Por favor verifique para atualizar a lista de músicas.</string>
+    <string name="erro_conexao">Não há conexão com a Internet! Por favor verifique e tente novamente.</string>
+    <string name="musicas_observer">Musicas:</string>
 </resources>

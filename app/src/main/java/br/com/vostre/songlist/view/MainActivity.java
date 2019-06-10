@@ -28,6 +28,7 @@ import br.com.vostre.songlist.util.APIRetorno;
 import br.com.vostre.songlist.util.APIUtils;
 import br.com.vostre.songlist.util.Constants;
 import br.com.vostre.songlist.util.DBUtils;
+import br.com.vostre.songlist.util.NetworkUtils;
 import br.com.vostre.songlist.util.PreferenceUtils;
 import br.com.vostre.songlist.util.ToolbarUtils;
 import br.com.vostre.songlist.view.adapter.ArtistaAdapter;
@@ -197,9 +198,6 @@ public class MainActivity extends BaseActivity implements MusicaAPIListener, Pla
 
                         viewModel.salvarArtista(artista);
 
-                        Toast.makeText(getApplicationContext(),
-                                "Buscando músicas... Só um momento, por favor!", Toast.LENGTH_LONG).show();
-
                         //binding.container.requestFocus();
 
                         InputMethodManager imm = (InputMethodManager)
@@ -209,7 +207,7 @@ public class MainActivity extends BaseActivity implements MusicaAPIListener, Pla
                         imm.hideSoftInputFromWindow(binding.getRoot().getWindowToken(), 0);
 
                         viewModel.limparDadosArtista(artista);
-                        viewModel.retorno.observe(ctx, retornoObserver);
+                        //viewModel.retorno.observe(ctx, retornoObserver);
 
                         binding.autoCompleteTextView.setText("");
 
@@ -248,7 +246,13 @@ public class MainActivity extends BaseActivity implements MusicaAPIListener, Pla
             public boolean handleMessage(Message msg) {
                 if (msg.what == TRIGGER_AUTO_COMPLETE) {
                     if (!TextUtils.isEmpty(binding.autoCompleteTextView.getText())) {
-                        makeApiCall(binding.autoCompleteTextView.getText().toString());
+
+                        if(NetworkUtils.estaConectado(getApplicationContext())){
+                            makeApiCall(binding.autoCompleteTextView.getText().toString());
+                        } else{
+                            Toast.makeText(getApplicationContext(), R.string.erro_conexao_busca_artista, Toast.LENGTH_SHORT).show();
+                        }
+
                     }
                 }
                 return false;
@@ -294,7 +298,7 @@ public class MainActivity extends BaseActivity implements MusicaAPIListener, Pla
 
             viewModel.musicas.observe(this, musicasObserver);
         } else{
-            Toast.makeText(getApplicationContext(), "Por favor selecione ao menos um artista.",
+            Toast.makeText(getApplicationContext(), R.string.escolha_artista,
                     Toast.LENGTH_SHORT).show();
         }
 
@@ -326,16 +330,14 @@ public class MainActivity extends BaseActivity implements MusicaAPIListener, Pla
                         formPlaylist.show(ctx.getSupportFragmentManager(), "formPlaylist");
                         //viewModel.buscarPlaylists(ctx);
                     } else{
-                        Toast.makeText(getApplicationContext(), "Houve erro ao carregar seu usuário. " +
-                                "Por favor tente novamente.", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), R.string.erro_carregar_usuario, Toast.LENGTH_SHORT).show();
                     }
 
                     break;
 
                 // Auth flow returned an error
                 case ERROR:
-                    Toast.makeText(getApplicationContext(), "Houve erro ao fazer login. " +
-                            "Por favor tente novamente.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), R.string.erro_login, Toast.LENGTH_SHORT).show();
                     break;
 
                 // Most likely auth flow was cancelled
@@ -392,110 +394,117 @@ public class MainActivity extends BaseActivity implements MusicaAPIListener, Pla
                 break;
             case SETLIST:
 
-                try{
-
-                    if(consulta < 2 && result != null){
-
-                        setlists = result;
-
-                        APIUtils.consultaSetlists(artista.getId(), listener, 2);
-                        consulta++;
-                    } else{
-
-                        if(result != null){
-
-                            for(int w = 0; w < result.length(); w++){
-                                setlists.put(result.get(w));
-                            }
-
-                        }
-
-                        int contList = 0;
-                        int flagRepertorio = 0;
-
-                        if(setlists != null){
-                            for(int i = 0; i < setlists.length() && contList < 20; i++){
-
-                                Show show = new Show();
-
-                                String dataEvento = setlists.getJSONObject(i).getString("eventDate");
-
-                                JSONObject local = setlists.getJSONObject(i).getJSONObject("venue");
-
-                                JSONObject cidade = local.getJSONObject("city");
-                                JSONObject pais = cidade.getJSONObject("country");
-
-                                show.setId(setlists.getJSONObject(i).getString("id"));
-                                show.setArtista(artista.getId());
-                                show.setNome(local.getString("name"));
-                                show.setCidade(cidade.getString("name"));
-                                show.setEstado(cidade.getString("state"));
-                                show.setPais(pais.getString("name"));
-                                show.setData(DateTimeFormat.forPattern("dd-MM-YYYY").parseDateTime(dataEvento));
-
-                                if(viewModel == null){
-                                    viewModel = ViewModelProviders.of(this).get(MainViewModel.class);
-                                }
-
-                                viewModel.salvarShow(show);
-
-                                System.out.println(i+"| "+contList+" EVENTO: "+local.getString("name")
-                                        +" | "+cidade.getString("name")+", "+cidade.getString("state")+" - "
-                                        +pais.getString("name")+" - "+dataEvento);
+//                try{
 //
-//                        System.out.println("=== REPERTORIO ===");
-
-                                JSONArray sets = setlists.getJSONObject(i).getJSONObject("sets")
-                                        .getJSONArray("set");
-
-                                for(int y = 0; y < sets.length(); y++){
-                                    flagRepertorio = 0;
-                                    JSONArray musicas = sets.getJSONObject(y).getJSONArray("song");
-
-                                    if(musicas.length() > 0){
-                                        flagRepertorio++;
-                                    }
-
-                                    for(int z = 0; z < musicas.length(); z++){
-
-                                        Musica musica = new Musica();
-                                        musica.setId(UUID.randomUUID().toString());
-                                        musica.setNome(musicas.getJSONObject(z).getString("name"));
-                                        musica.setShow(show.getId());
-                                        musica.setObservacao(musicas.getJSONObject(z).optString("info"));
-
-                                        viewModel.salvarMusica(musica);
-
-//                                System.out.println(musicas.getJSONObject(z).getString("name"));
-                                    }
-
-
-                                }
-
-//                        System.out.println("=== FIM REPERTORIO ===");
-
-                                if(flagRepertorio > 0){
-                                    contList++;
-                                }
-
-                            }
-                        }
-
-                        if(contList == 0){
-                            Toast.makeText(getApplicationContext(),
-                                    "Nenhum registro encontrado!", Toast.LENGTH_LONG).show();
-                        }
-
-                    }
-
-//                    Intent i = new Intent(getApplicationContext(), RepertorioActivity.class);
-//                    i.putExtra("id", artista.getId());
-//                    i.putExtra("nome", artista.getNome());
-//                    getApplicationContext().startActivity(i);
-
-                } catch(JSONException e){
-                    System.out.println(e.getLocalizedMessage());
-                }
+//                    if(consulta < 2 && result != null){
+//
+//                        setlists = result;
+//
+//                        APIUtils.consultaSetlists(artista.getId(), listener, 2);
+//                        consulta++;
+//                    } else{
+//
+//                        if(result != null){
+//
+//                            for(int w = 0; w < result.length(); w++){
+//                                setlists.put(result.get(w));
+//                            }
+//
+//                        }
+//
+//                        int contList = 0;
+//                        int flagRepertorio = 0;
+//
+//                        if(setlists != null){
+//                            for(int i = 0; i < setlists.length() && contList < 20; i++){
+//
+//                                Show show = new Show();
+//
+//                                String dataEvento = setlists.getJSONObject(i).getString("eventDate");
+//
+//                                JSONObject local = setlists.getJSONObject(i).getJSONObject("venue");
+//
+//                                JSONObject cidade = local.getJSONObject("city");
+//                                JSONObject pais = cidade.getJSONObject("country");
+//
+//                                show.setId(setlists.getJSONObject(i).getString("id"));
+//                                show.setArtista(artista.getId());
+//                                show.setNome(local.getString("name"));
+//                                show.setCidade(cidade.getString("name"));
+//                                show.setEstado(cidade.optString("state"));
+//                                show.setPais(pais.getString("name"));
+//                                show.setData(DateTimeFormat.forPattern("dd-MM-YYYY").parseDateTime(dataEvento));
+//
+//                                if(viewModel == null){
+//                                    viewModel = ViewModelProviders.of(this).get(MainViewModel.class);
+//                                }
+//
+//                                viewModel.salvarShow(show);
+//
+//                                System.out.println(i+"| "+contList+" EVENTO: "+local.getString("name")
+//                                        +" | "+cidade.getString("name")+", "+cidade.optString("state")+" - "
+//                                        +pais.getString("name")+" - "+dataEvento);
+////
+////                        System.out.println("=== REPERTORIO ===");
+//
+//                                JSONArray sets = setlists.getJSONObject(i).getJSONObject("sets")
+//                                        .getJSONArray("set");
+//
+//                                for(int y = 0; y < sets.length(); y++){
+//                                    flagRepertorio = 0;
+//                                    JSONArray musicas = sets.getJSONObject(y).getJSONArray("song");
+//
+//                                    if(musicas.length() > 0){
+//                                        flagRepertorio++;
+//                                    }
+//
+//                                    for(int z = 0; z < musicas.length(); z++){
+//
+//                                        Musica musica = new Musica();
+//                                        musica.setId(UUID.randomUUID().toString());
+//                                        musica.setNome(musicas.getJSONObject(z).getString("name"));
+//                                        musica.setShow(show.getId());
+//                                        musica.setObservacao(musicas.getJSONObject(z).optString("info"));
+//
+//                                        viewModel.salvarMusica(musica);
+//
+////                                System.out.println(musicas.getJSONObject(z).getString("name"));
+//                                    }
+//
+//
+//                                }
+//
+////                        System.out.println("=== FIM REPERTORIO ===");
+//
+//                                if(flagRepertorio > 0){
+//                                    contList++;
+//                                }
+//
+//                            }
+//                        }
+//
+//                        if(contList == 0){
+//                            Toast.makeText(getApplicationContext(),
+//                                    "Nenhum registro encontrado!", Toast.LENGTH_LONG).show();
+//                        }
+//
+//                        consulta = 1;
+//                        setlists = null;
+//
+//                    }
+//
+////                    Intent i = new Intent(getApplicationContext(), RepertorioActivity.class);
+////                    i.putExtra("id", artista.getId());
+////                    i.putExtra("nome", artista.getNome());
+////                    getApplicationContext().startActivity(i);
+//
+//                } catch(JSONException e){
+//                    System.out.println(e.getLocalizedMessage());
+//                    Toast.makeText(getApplicationContext(),
+//                            "Erro ao buscar músicas. "+e.getLocalizedMessage(), Toast.LENGTH_LONG).show();
+//                    consulta = 1;
+//                    setlists = null;
+//                }
 
                 break;
         }
@@ -523,7 +532,7 @@ public class MainActivity extends BaseActivity implements MusicaAPIListener, Pla
             }
 
         } else{
-            Toast.makeText(getApplicationContext(), "Erro ao exportar músicas!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), R.string.erro_exportar_musicas, Toast.LENGTH_SHORT).show();
         }
 
     }
@@ -532,7 +541,7 @@ public class MainActivity extends BaseActivity implements MusicaAPIListener, Pla
     public void OnPlaylistAtualizadaAPIResult(boolean atualizou, String idPlaylist) {
 
         if(atualizou){
-            Toast.makeText(getApplicationContext(), "Playlist criada com sucesso!",
+            Toast.makeText(getApplicationContext(), R.string.playlist_criada_sucesso,
                     Toast.LENGTH_SHORT).show();
 
             viewModel.resetaSelecionados();
@@ -540,8 +549,7 @@ public class MainActivity extends BaseActivity implements MusicaAPIListener, Pla
             adapter.notifyDataSetChanged();
 
         } else{
-            Toast.makeText(getApplicationContext(), "Erro ao criar playlist! " +
-                    "Por favor tente novamente", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), R.string.erro_criar_playlist, Toast.LENGTH_SHORT).show();
             viewModel.removerPlaylist(idPlaylist);
         }
 

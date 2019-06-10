@@ -93,7 +93,7 @@ public class RepertorioActivity extends BaseActivity implements MusicaAPIListene
         binding = DataBindingUtil.setContentView(this, R.layout.activity_repertorio);
         super.onCreate(savedInstanceState);
         binding.setView(this);
-        setTitle("Músicas");
+        setTitle(R.string.musicas);
         getSupportActionBar().setDisplayShowTitleEnabled(true);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -110,6 +110,8 @@ public class RepertorioActivity extends BaseActivity implements MusicaAPIListene
         viewModel.setId(id);
 
         binding.textViewArtista.setText(nome);
+
+        onClickBtnConsultar(binding.btnConsultar);
 
         viewModel.musicas.observe(this, musicasObserver);
 
@@ -141,11 +143,14 @@ public class RepertorioActivity extends BaseActivity implements MusicaAPIListene
             this.artista = artista;
             viewModel.limparDadosArtista(artista);
             viewModel.retorno.observe(this, retornoObserver);
-            Toast.makeText(getApplicationContext(), "Refazendo consulta. Só um momento, por favor!",
-                    Toast.LENGTH_SHORT).show();
+
+            Toast.makeText(getApplicationContext(),
+                    R.string.buscando_musicas, Toast.LENGTH_LONG).show();
+
+//            Toast.makeText(getApplicationContext(), "Refazendo consulta. Só um momento, por favor!",
+//                    Toast.LENGTH_SHORT).show();
         } else{
-            Toast.makeText(getApplicationContext(), "Não há conexão com a Internet! " +
-                            "Por favor verifique e tente novamente.",
+            Toast.makeText(getApplicationContext(), R.string.erro_internet_musicas,
                     Toast.LENGTH_SHORT).show();
         }
 
@@ -163,8 +168,7 @@ public class RepertorioActivity extends BaseActivity implements MusicaAPIListene
 
             AuthenticationClient.openLoginActivity(this, REQUEST_CODE, request);
         } else{
-            Toast.makeText(getApplicationContext(), "Não há conexão com a Internet! " +
-                            "Por favor verifique e tente novamente.",
+            Toast.makeText(getApplicationContext(), R.string.erro_conexao,
                     Toast.LENGTH_SHORT).show();
         }
 
@@ -173,7 +177,7 @@ public class RepertorioActivity extends BaseActivity implements MusicaAPIListene
     Observer<List<MusicaQuantidade>> musicasObserver = new Observer<List<MusicaQuantidade>>() {
         @Override
         public void onChanged(List<MusicaQuantidade> musicas) {
-            System.out.println("Musicas: "+musicas.size());
+            System.out.println(getString(R.string.musicas_observer)+musicas.size());
             adapter.musicas = musicas;
             adapter.notifyDataSetChanged();
 
@@ -224,16 +228,14 @@ public class RepertorioActivity extends BaseActivity implements MusicaAPIListene
                         formPlaylist.show(ctx.getSupportFragmentManager(), "formPlaylist");
                         //viewModel.buscarPlaylists(ctx);
                     } else{
-                        Toast.makeText(getApplicationContext(), "Houve erro ao carregar seu usuário. " +
-                                "Por favor tente novamente.", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), R.string.erro_carregar_usuario, Toast.LENGTH_SHORT).show();
                     }
 
                     break;
 
                 // Auth flow returned an error
                 case ERROR:
-                    Toast.makeText(getApplicationContext(), "Houve erro ao fazer login. " +
-                            "Por favor tente novamente.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), R.string.erro_login, Toast.LENGTH_SHORT).show();
                     break;
 
                 // Most likely auth flow was cancelled
@@ -262,7 +264,7 @@ public class RepertorioActivity extends BaseActivity implements MusicaAPIListene
             }
 
         } else{
-            Toast.makeText(getApplicationContext(), "Erro ao exportar músicas!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), R.string.erro_exportar_musicas, Toast.LENGTH_SHORT).show();
         }
 
     }
@@ -271,11 +273,10 @@ public class RepertorioActivity extends BaseActivity implements MusicaAPIListene
     public void OnPlaylistAtualizadaAPIResult(boolean atualizou, String idPlaylist) {
 
         if(atualizou){
-            Toast.makeText(getApplicationContext(), "Playlist criada com sucesso!",
+            Toast.makeText(getApplicationContext(), R.string.playlist_criada_sucesso,
                     Toast.LENGTH_SHORT).show();
         } else{
-            Toast.makeText(getApplicationContext(), "Erro ao criar playlist! " +
-                    "Por favor tente novamente", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), R.string.erro_criar_playlist, Toast.LENGTH_SHORT).show();
             viewModel.removerPlaylist(idPlaylist);
         }
 

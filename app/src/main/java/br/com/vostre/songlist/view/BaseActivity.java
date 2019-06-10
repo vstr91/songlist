@@ -107,19 +107,15 @@ public class BaseActivity extends AppCompatActivity implements APIListener, View
                                 show.setArtista(artista.getId());
                                 show.setNome(local.getString("name"));
                                 show.setCidade(cidade.getString("name"));
-                                show.setEstado(cidade.getString("state"));
+                                show.setEstado(cidade.optString("state"));
                                 show.setPais(pais.getString("name"));
-                                show.setData(DateTimeFormat.forPattern("dd-MM-YYYY").parseDateTime(dataEvento));
+                                show.setData(DateTimeFormat.forPattern("dd-MM-YYYY HH:mm").parseDateTime(dataEvento+" 01:00"));
 
                                 if(viewModel == null){
                                     viewModel = ViewModelProviders.of(this).get(BaseViewModel.class);
                                 }
 
                                 viewModel.salvarShow(show);
-
-                                System.out.println(i+"| "+contList+" EVENTO: "+local.getString("name")
-                                        +" | "+cidade.getString("name")+", "+cidade.getString("state")+" - "
-                                        +pais.getString("name")+" - "+dataEvento);
 //
 //                        System.out.println("=== REPERTORIO ===");
 
@@ -159,13 +155,16 @@ public class BaseActivity extends AppCompatActivity implements APIListener, View
                             }
                         } else{
                             Toast.makeText(getApplicationContext(),
-                                    "Erro ao buscar informações. Por favor tente novamente.", Toast.LENGTH_LONG).show();
+                                    R.string.erro_informacoes, Toast.LENGTH_LONG).show();
                         }
 
                         if(contList == 0){
                             Toast.makeText(getApplicationContext(),
-                                    "Nenhum registro encontrado!", Toast.LENGTH_LONG).show();
+                                    R.string.nenhum_registro, Toast.LENGTH_LONG).show();
                         }
+
+                        consulta = 1;
+                        setlists = null;
 
                     }
 
@@ -207,9 +206,10 @@ public class BaseActivity extends AppCompatActivity implements APIListener, View
                     APIUtils.consultaSetlists(artista.getId(), listener, 1);
                 } catch (JSONException e) {
                     e.printStackTrace();
+                    Toast.makeText(getApplicationContext(), getString(R.string.erro_busca_repertorio)+e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
                 }
             } else{
-                Toast.makeText(getApplicationContext(), "Erro ao buscar repertório.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), R.string.erro_busca_repertorio, Toast.LENGTH_SHORT).show();
             }
 
         }

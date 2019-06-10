@@ -40,7 +40,7 @@
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="8dp"
                 android:layout_marginRight="8dp"
-                android:hint="Digite aqui o nome do artista ou banda..."
+                android:hint="@string/digite_aqui_o_nome_do_artista_ou_banda"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView5" />
@@ -57,7 +57,7 @@
                 android:layout_marginBottom="8dp"
                 android:onClick="onClickBtnSpotify"
                 android:padding="5dp"
-                android:text="Criar Playlist no Spotify"
+                android:text="@string/criar_playlist_no_spotify"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent" />
@@ -90,7 +90,7 @@
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="8dp"
                 android:layout_marginRight="8dp"
-                android:text="Consultas Anteriores"
+                android:text="@string/consultas_anteriores"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/autoCompleteTextView" />
@@ -137,7 +137,7 @@
                     android:layout_marginEnd="8dp"
                     android:layout_marginRight="8dp"
                     android:background="@color/transparente"
-                    android:text="Sobre o Aplicativo"
+                    android:text="@string/sobre_o_aplicativo"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />

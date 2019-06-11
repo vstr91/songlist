@@ -20,6 +20,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Toast;
 
+import com.google.firebase.analytics.FirebaseAnalytics;
 import com.karumi.dexter.Dexter;
 import com.karumi.dexter.MultiplePermissionsReport;
 import com.karumi.dexter.PermissionToken;
@@ -56,6 +57,7 @@ import br.com.vostre.songlist.model.pojo.MusicaQuantidade;
 import br.com.vostre.songlist.util.APIRetorno;
 import br.com.vostre.songlist.util.APIUtils;
 import br.com.vostre.songlist.util.DBUtils;
+import br.com.vostre.songlist.util.FirebaseUtils;
 import br.com.vostre.songlist.util.NetworkUtils;
 import br.com.vostre.songlist.util.PreferenceUtils;
 import br.com.vostre.songlist.view.adapter.ArtistaAdapter;
@@ -88,6 +90,8 @@ public class RepertorioActivity extends BaseActivity implements MusicaAPIListene
     List<String> musicasSpotify;
     Integer cont = 0;
 
+    FirebaseAnalytics mFirebaseAnalytics;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_repertorio);
@@ -101,6 +105,7 @@ public class RepertorioActivity extends BaseActivity implements MusicaAPIListene
 
         ctx = this;
         listener = this;
+        mFirebaseAnalytics = FirebaseUtils.iniciaAnalytics(getApplicationContext());
 
         id = getIntent().getStringExtra("id");
         String nome = getIntent().getStringExtra("nome");
@@ -165,6 +170,8 @@ public class RepertorioActivity extends BaseActivity implements MusicaAPIListene
 
             builder.setScopes(new String[]{"playlist-modify-public", "playlist-modify-private"});
             AuthenticationRequest request = builder.build();
+
+            FirebaseUtils.gravaEvento(mFirebaseAnalytics, new Bundle(), "clicou_btn_spotify_repertorio");
 
             AuthenticationClient.openLoginActivity(this, REQUEST_CODE, request);
         } else{

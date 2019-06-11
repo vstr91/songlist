@@ -28,6 +28,7 @@ import br.com.vostre.songlist.util.APIRetorno;
 import br.com.vostre.songlist.util.APIUtils;
 import br.com.vostre.songlist.util.Constants;
 import br.com.vostre.songlist.util.DBUtils;
+import br.com.vostre.songlist.util.FirebaseUtils;
 import br.com.vostre.songlist.util.NetworkUtils;
 import br.com.vostre.songlist.util.PreferenceUtils;
 import br.com.vostre.songlist.util.ToolbarUtils;
@@ -50,6 +51,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
+import com.google.firebase.analytics.FirebaseAnalytics;
 import com.karumi.dexter.Dexter;
 import com.karumi.dexter.MultiplePermissionsReport;
 import com.karumi.dexter.PermissionToken;
@@ -98,6 +100,8 @@ public class MainActivity extends BaseActivity implements MusicaAPIListener, Pla
     NavigationView navView;
     ActionBarDrawerToggle drawerToggle;
 
+    FirebaseAnalytics mFirebaseAnalytics;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
@@ -110,6 +114,8 @@ public class MainActivity extends BaseActivity implements MusicaAPIListener, Pla
 
         drawer = binding.container;
         navView = binding.nav;
+
+        mFirebaseAnalytics = FirebaseUtils.iniciaAnalytics(getApplicationContext());
 
         navView.setNavigationItemSelectedListener(this);
 
@@ -197,6 +203,12 @@ public class MainActivity extends BaseActivity implements MusicaAPIListener, Pla
                         artista = autoSuggestAdapter.getObject(position);
 
                         viewModel.salvarArtista(artista);
+
+                        Bundle bundle = new Bundle();
+                        bundle.putString("artista", artista.getNome());
+                        bundle.putString("descricao", artista.getDescricao());
+
+                        FirebaseUtils.gravaEvento(mFirebaseAnalytics, bundle, "artista_consulta");
 
                         //binding.container.requestFocus();
 
@@ -297,6 +309,9 @@ public class MainActivity extends BaseActivity implements MusicaAPIListener, Pla
             viewModel.setIdArtistas(ids.toArray(new String[0]));
 
             viewModel.musicas.observe(this, musicasObserver);
+
+            FirebaseUtils.gravaEvento(mFirebaseAnalytics, new Bundle(), "clicou_btn_spotify_main");
+
         } else{
             Toast.makeText(getApplicationContext(), R.string.escolha_artista,
                     Toast.LENGTH_SHORT).show();
@@ -330,6 +345,7 @@ public class MainActivity extends BaseActivity implements MusicaAPIListener, Pla
                         formPlaylist.show(ctx.getSupportFragmentManager(), "formPlaylist");
                         //viewModel.buscarPlaylists(ctx);
                     } else{
+                        FirebaseUtils.gravaEvento(mFirebaseAnalytics, new Bundle(), "erro_carregar_spotify_main");
                         Toast.makeText(getApplicationContext(), R.string.erro_carregar_usuario, Toast.LENGTH_SHORT).show();
                     }
 
@@ -337,6 +353,7 @@ public class MainActivity extends BaseActivity implements MusicaAPIListener, Pla
 
                 // Auth flow returned an error
                 case ERROR:
+                    FirebaseUtils.gravaEvento(mFirebaseAnalytics, new Bundle(), "erro_login_spotify_main");
                     Toast.makeText(getApplicationContext(), R.string.erro_login, Toast.LENGTH_SHORT).show();
                     break;
 
@@ -532,6 +549,7 @@ public class MainActivity extends BaseActivity implements MusicaAPIListener, Pla
             }
 
         } else{
+            FirebaseUtils.gravaEvento(mFirebaseAnalytics, new Bundle(), "erro_exportar_spotify_main");
             Toast.makeText(getApplicationContext(), R.string.erro_exportar_musicas, Toast.LENGTH_SHORT).show();
         }
 
@@ -541,6 +559,7 @@ public class MainActivity extends BaseActivity implements MusicaAPIListener, Pla
     public void OnPlaylistAtualizadaAPIResult(boolean atualizou, String idPlaylist) {
 
         if(atualizou){
+            FirebaseUtils.gravaEvento(mFirebaseAnalytics, new Bundle(), "playlist_criada_spotify_main");
             Toast.makeText(getApplicationContext(), R.string.playlist_criada_sucesso,
                     Toast.LENGTH_SHORT).show();
 
@@ -549,6 +568,7 @@ public class MainActivity extends BaseActivity implements MusicaAPIListener, Pla
             adapter.notifyDataSetChanged();
 
         } else{
+            FirebaseUtils.gravaEvento(mFirebaseAnalytics, new Bundle(), "erro_criar_playlist_spotify_main");
             Toast.makeText(getApplicationContext(), R.string.erro_criar_playlist, Toast.LENGTH_SHORT).show();
             viewModel.removerPlaylist(idPlaylist);
         }

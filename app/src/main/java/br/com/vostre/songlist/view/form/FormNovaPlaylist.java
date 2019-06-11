@@ -12,10 +12,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.google.firebase.analytics.FirebaseAnalytics;
+
 import br.com.vostre.songlist.R;
 import br.com.vostre.songlist.databinding.FormNovaPlaylistBinding;
 import br.com.vostre.songlist.listener.MusicaAPIListener;
 import br.com.vostre.songlist.listener.PlaylistAPIListener;
+import br.com.vostre.songlist.util.FirebaseUtils;
 import br.com.vostre.songlist.viewModel.BaseViewModel;
 import br.com.vostre.songlist.viewModel.RepertorioViewModel;
 
@@ -26,6 +29,8 @@ public class FormNovaPlaylist extends DialogFragment implements PlaylistAPIListe
 
     MusicaAPIListener listener;
     PlaylistAPIListener pListener;
+
+    FirebaseAnalytics mFirebaseAnalytics;
 
     public MusicaAPIListener getListener() {
         return listener;
@@ -54,6 +59,8 @@ public class FormNovaPlaylist extends DialogFragment implements PlaylistAPIListe
 
         binding.setView(this);
 
+        mFirebaseAnalytics = FirebaseUtils.iniciaAnalytics(getActivity().getApplicationContext());
+
         return binding.getRoot();
 
     }
@@ -64,6 +71,11 @@ public class FormNovaPlaylist extends DialogFragment implements PlaylistAPIListe
 
         if(nome != null && !nome.isEmpty()){
             viewModel.criarPlaylist(nome, listener, this);
+
+            Bundle bundle = new Bundle();
+            bundle.putString("nome", nome);
+
+            FirebaseUtils.gravaEvento(mFirebaseAnalytics, new Bundle(), "salvar_nova_playlist");
         } else{
             Toast.makeText(getActivity().getApplicationContext(), "Por favor informe o nome!",
                     Toast.LENGTH_SHORT).show();
